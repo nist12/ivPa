@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "haeuser",
+  "info": {
+    "singularName": "haus",
+    "pluralName": "haeuser",
+    "displayName": "Haus",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Titel": {
+      "type": "string"
+    },
+    "Bild": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "Beschreibung": {
+      "type": "richtext"
+    },
+    "Preis": {
+      "type": "decimal"
+    }
+  }
+}
