@@ -66,45 +66,36 @@
   import Footer from '~/components/Footer.vue'
   import ServiceCard from '~/components/ServiceCard.vue'
   import PropertyCard from '~/components/PropertyCard.vue'
-  
-  import axios from 'axios'
-  import { ref, onMounted } from 'vue'
-  
+
+  import { ref } from 'vue'
+
   // Zustand für die Häuser
   const houses = ref([])
-  
-  // API-Token
-  const apiToken = 'dd82f7996031201d21a56d1e489fa65ebc261c0524886af951a0789d9a1efa155140fd30b3e1cf4d35d9342dd3df2ff943dbbbf02ec9588e43ebfecd1240ecde952c594526682bf51e2ff24025d983ed3f28093023f75bb0cb86a9c416fbdf6f3acdf3e8add5da685c9eaab82edeaec6861fb6c1e5f71a7920521ef742e8875c'
-  
-  // Funktion zum Abrufen der Häuser
-  const fetchHouses = async () => {
-  try {
-    const response = await axios.get('http://localhost:1337/api/haeuser?populate=*', {
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
-      },
-    });
-    console.log('Daten von Strapi:', response.data.data); // Prüfe die Struktur hier
-    houses.value = response.data.data;
-    console.log('Daten von Strapi:', response.data.data); // Existierende Log-Zeile
-console.log('Häuser:', houses.value); // Neue Log-Zeile
 
-  } catch (error) {
-    console.error('Fehler beim Abrufen der Daten:', error);
+  // Verwende `useFetch` oder `useAsyncData` für serverseitige Datenabfragen
+  const { data, error } = await useFetch('/api/haeuser?populate=*', {
+  baseURL: 'http://localhost:1337',
+  headers: {
+    Authorization: `Bearer ${useRuntimeConfig().strapiApiToken}`, // Token korrekt einfügen
+  },
+  server: true, // Sicherstellen, dass die Anfrage auf dem Server ausgeführt wird
+});
+
+  // Zuordnung der abgerufenen Daten zu `houses`
+  if (data.value) {
+    houses.value = data.value.data
   }
-};
 
-  
-  // Abrufen der Häuser beim Mounten des Komponentes
-  onMounted(() => {
-    fetchHouses()
-  })
-  
+  if (error.value) {
+    console.error('Fehler beim Abrufen der Daten:', error.value)
+  }
+
   // Scroll-Funktion
   const scrollTo = (target) => {
     document.querySelector(target).scrollIntoView({ behavior: 'smooth' })
   }
-  </script>
+</script>
+
   
   <style scoped>
   /* Optional: custom styles */
